@@ -12,6 +12,7 @@ typedef struct InputData {
 
 void parse(char *str, InputData *parsedInput);
 void part1(InputData *parsedInput, char **output);
+void part2(InputData *parsedInput, char **output);
 
 int main() {
     char *data;
@@ -21,9 +22,12 @@ int main() {
     parse(data, &parsedInput);
 
     char *part1_output;
+    char *part2_output;
     part1(&parsedInput, &part1_output);
+    part2(&parsedInput, &part2_output);
 
-    printf("Part1: %s\n", part1_output);
+    printf("Part 1: %s\n", part1_output);
+    printf("Part 2: %s\n", part2_output);
 
     return 0;
 }
@@ -53,6 +57,24 @@ void part1(InputData *pi, char **output) {
 
     for (size_t i = 0; i < pi->masses_len; i += 1) {
         sum += pi->masses[i] / 3 - 2;
+    }
+
+    size_t len = snprintf(NULL, 0, "%lu", sum);
+    *output = malloc(sizeof(char) * (len + 1));
+    snprintf(*output, len + 1, "%lu", sum);
+}
+
+u_int64_t get_required_fuel_recursive(unsigned long mass) {
+    int64_t val = mass / 3 - 2;
+
+    return val <= 0 ? 0 : val + get_required_fuel_recursive(val);
+}
+
+void part2(InputData *pi, char **output) {
+    u_int64_t sum = 0;
+
+    for (size_t i = 0; i < pi->masses_len; i += 1) {
+        sum += get_required_fuel_recursive(pi->masses[i]);
     }
 
     size_t len = snprintf(NULL, 0, "%lu", sum);
