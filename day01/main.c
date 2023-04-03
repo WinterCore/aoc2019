@@ -50,6 +50,8 @@ void parse(char *str, InputData *parsedInput) {
     parsedInput->masses_len = len;
     parsedInput->masses = malloc(i * sizeof(unsigned long));
     memcpy(parsedInput->masses, buffer, i * sizeof(unsigned long));
+
+    free(buffer);
 }
 
 void part1(InputData *pi, char **output) {
